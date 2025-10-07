@@ -21,7 +21,32 @@ jobs:
       - checkout
       - echo
 
+  hello-job-setter:
+    executor: node
+    steps:
+      - run: echo "hello world" > hello.txt
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./
+
+  hello-job-getter:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          if [[ `cat hello.txt` == "hello world" ]]; then
+            echo "It worked!";
+          else
+            echo "Nope!"; exit 1
+          fi
+
 workflows:
   my-workflow:
     jobs:
       - hello-job
+      - hello-job-setter
+      - hello-job-getter:
+          requires:
+            - hello-job-setter
