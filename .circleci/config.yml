@@ -5,6 +5,9 @@ executors:
     docker:
       - image: cimg/node:17.2.0
 
+orbs:
+  hello-orb: jpalenz77/hello-orb@0.0.1
+
 commands:
   echo:
     parameters:
@@ -46,6 +49,7 @@ workflows:
   my-workflow:
     jobs:
       - hello-job
+      - hello-orb/hello  # ¡Usando tu orb!
       - hello-job-setter
       - hello-job-getter:
           requires:
